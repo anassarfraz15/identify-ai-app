@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useCallback, type DragEvent } from 'react';
@@ -123,7 +124,7 @@ export function ImageUploader({ onImageReady }: ImageUploaderProps) {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       className={cn(
-        'w-full max-w-xl mx-auto flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-2xl text-center transition-all duration-300',
+        'w-full max-w-xl mx-auto flex flex-col items-center justify-center p-4 sm:p-8 border-2 border-dashed rounded-2xl text-center transition-all duration-300',
         isDragging ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/50'
       )}
     >
@@ -136,9 +137,9 @@ export function ImageUploader({ onImageReady }: ImageUploaderProps) {
       />
       <div className="flex flex-col items-center gap-4">
         <div className="p-4 bg-primary/10 rounded-full text-primary">
-            <UploadCloud className="w-12 h-12" />
+            <UploadCloud className="w-10 h-10 sm:w-12 sm:h-12" />
         </div>
-        <h3 className="text-2xl font-bold font-headline">Drag & Drop Image</h3>
+        <h3 className="text-xl sm:text-2xl font-bold font-headline">Drag & Drop Image</h3>
         <p className="text-muted-foreground">or choose one of the options below</p>
         <div className="flex flex-col sm:flex-row gap-4 mt-4">
           <Button onClick={handleUploadClick} size="lg">

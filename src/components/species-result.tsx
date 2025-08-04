@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { IdentifySpeciesOutput } from '@/ai/flows/identify-species';
@@ -29,23 +30,26 @@ interface InfoCardProps {
   children: React.ReactNode;
 }
 
-const InfoCard = ({ icon: Icon, title, children }: InfoCardProps) => (
-  <Card className="glass-card h-full">
-    <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2">
-      <Icon className="w-6 h-6 text-primary" />
-      <CardTitle className="text-lg font-headline">{title}</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <p className="text-muted-foreground">{children}</p>
-    </CardContent>
-  </Card>
-);
+const InfoCard = ({ icon: Icon, title, children }: InfoCardProps) => {
+  if (!children) return null;
+  return (
+    <Card className="glass-card h-full">
+      <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2">
+        <Icon className="w-6 h-6 text-primary" />
+        <CardTitle className="text-lg font-headline">{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-muted-foreground">{children}</p>
+      </CardContent>
+    </Card>
+  );
+};
 
 export function SpeciesResult({ result, imagePreview, onReset }: SpeciesResultProps) {
   const lowConfidence = result.confidence < 70;
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-8">
+    <div className="w-full max-w-4xl mx-auto space-y-6 sm:space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
         <div className="md:col-span-1 flex flex-col items-center">
           <img
@@ -58,21 +62,25 @@ export function SpeciesResult({ result, imagePreview, onReset }: SpeciesResultPr
         <div className="md:col-span-2 space-y-4">
           <Card className="glass-card">
             <CardHeader>
-              <h1 className="text-4xl font-bold font-headline tracking-tight text-primary">{result.speciesName}</h1>
-              <p className="text-lg text-muted-foreground flex items-center gap-2">
-                <BookOpen className="w-4 h-4" />
-                <em>{result.scientificName}</em>
-              </p>
+              <h1 className="text-3xl sm:text-4xl font-bold font-headline tracking-tight text-primary">{result.speciesName || 'Unknown Species'}</h1>
+              {result.scientificName && (
+                <p className="text-base sm:text-lg text-muted-foreground flex items-center gap-2">
+                  <BookOpen className="w-4 h-4" />
+                  <em>{result.scientificName}</em>
+                </p>
+              )}
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center mb-1">
-                  <span className="font-semibold">Confidence</span>
-                  <span className="font-bold text-primary">{result.confidence.toFixed(1)}%</span>
+              {result.confidence && (
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="font-semibold">Confidence</span>
+                    <span className="font-bold text-primary">{result.confidence.toFixed(1)}%</span>
+                  </div>
+                  <Progress value={result.confidence} aria-label={`${result.confidence}% confidence`} />
                 </div>
-                <Progress value={result.confidence} aria-label={`${result.confidence}% confidence`} />
-              </div>
-              {result.venomous !== undefined && (
+              )}
+              {result.venomous !== undefined && result.venomous !== null && (
                 <div className="mt-4">
                   <Badge variant={result.venomous ? 'destructive' : 'default'} className="flex gap-2 items-center w-fit">
                     {result.venomous ? <Skull className="w-4 h-4" /> : <ShieldCheck className="w-4 h-4" />}
